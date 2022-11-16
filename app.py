@@ -1,5 +1,8 @@
-import whisper
 import torch
+import whisper
+import os
+import base64
+from io import BytesIO
 
 # Init is ran on server startup
 # Load your model to GPU as a global variable here using the variable name "model"
@@ -73,7 +76,9 @@ def inference(model_inputs:dict) -> dict:
     decode_language = {k.split("_")[0]: v for k,v in languages.items()}
     language = decode_language[result.language]
     text = result.text
-    out = f"Language Detected: {language} Text: {text}"
+    out = f"Language Detected is {language} and corresponding text is {text}"
+    output = {"text":out}
+    os.remove("input.mp3")
 
     # Return the results as a dictionary
-    return out
+    return output

@@ -4,10 +4,10 @@
 # load openai whisper model
 
 import whisper
+import torch
 
 def download_model():
-    # do a dry run of loading the huggingface model, which will download weights
-    whisper.load_model("large")
+    model = whisper.load_model("base")
 
 if __name__ == "__main__":
     download_model()

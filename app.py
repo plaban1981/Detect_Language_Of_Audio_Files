@@ -15,13 +15,18 @@ def inference(model_inputs:dict) -> dict:
     global model
 
     # Parse out your arguments
-    prompt = model_inputs.get('prompt', None)
-    if prompt == None:
-        return {'message': "No prompt provided"}
+    mp3BytesString = model_inputs.get('mp3BytesString', None)
+    if mp3BytesString == None:
+        return {'message': "No input provided"}
+    
+    mp3Bytes = BytesIO(base64.b64decode(mp3BytesString.encode("ISO-8859-1")))
+    with open('input.mp3','wb') as file:
+        file.write(mp3Bytes.getbuffer())
+    
     
     # Run the model
     # load audio and pad/trim it to fit 30 seconds
-    audio = whisper.load_audio(prompt)
+    audio = whisper.load_audio('input.mp3')
     audio = whisper.pad_or_trim(audio)
     # make log-Mel spectrogram and move to the same device as the model
     mel = whisper.log_mel_spectrogram(audio).to(model.device)
